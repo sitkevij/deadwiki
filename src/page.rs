@@ -90,10 +90,10 @@ impl Page {
                     format!(
                         "{}/{}",
                         parts.rev().collect::<Vec<_>>().join("/"),
-                        capitalize(last)
+                        capitalize(last, false)
                     )
                 } else {
-                    capitalize(&part)
+                    capitalize(&part, false)
                 }
             })
             .collect::<Vec<_>>()
@@ -108,12 +108,14 @@ impl Page {
 }
 
 /// Capitalize the first letter of a string.
-fn capitalize(s: &str) -> String {
-    format!(
-        "{}{}",
-        s.chars().next().unwrap_or('?').to_uppercase(),
-        &s.chars().skip(1).collect::<String>()
-    )
+fn capitalize(s: &str, capitalize_first_letter: bool) -> String {
+    if capitalize_first_letter {
+        format!("{}{}",
+            s.chars().next().unwrap_or('?').to_uppercase(),
+            &s.chars().skip(1).collect::<String>())
+    } else {
+        s.to_string()
+    }
 }
 
 #[cfg(test)]
@@ -124,13 +126,13 @@ mod test {
     fn test_name() {
         let page = Page::new("./wiki", "./wiki/info.md");
         assert_eq!(page.name(), "info");
-        assert_eq!(page.title(), "Info");
+        assert_eq!(page.title(), "info");
         assert_eq!(page.url(), "/info");
         assert_eq!(page.path, "./wiki/info.md");
 
         let page = Page::new("./wiki", "./wiki/linux_laptops.md");
         assert_eq!(page.name(), "linux_laptops");
-        assert_eq!(page.title(), "Linux Laptops");
+        assert_eq!(page.title(), "linux laptops");
         assert_eq!(page.url(), "/linux_laptops");
         assert_eq!(page.path, "./wiki/linux_laptops.md");
     }
