@@ -47,10 +47,12 @@ impl Page {
     }
 
     pub fn name(&self) -> &str {
+        println!("page::name {}", self.path_without_root().trim_end_matches(".md"));
         self.path_without_root().trim_end_matches(".md")
     }
 
     pub fn url(&self) -> String {
+        println!("page::url {}", format!("/{}", self.name()));
         format!("/{}", self.name())
     }
 
@@ -59,6 +61,10 @@ impl Page {
     }
 
     pub fn path_without_root(&self) -> &str {
+        println!("page::path_without_root {}",  self.path
+            .trim_start_matches(&self.root)
+            .trim_start_matches('.')
+            .trim_start_matches('/'));
         self.path
             .trim_start_matches(&self.root)
             .trim_start_matches('.')

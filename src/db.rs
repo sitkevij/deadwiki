@@ -65,7 +65,8 @@ impl DB {
 
     /// All the wiki pages, in alphabetical order.
     pub fn pages(&self) -> Result<Vec<Page>> {
-        Ok(shell!("find {} -type f -name '*.md' | sort", self.root)?
+        // Ok(shell!("find {} -type f -name '*.md' | sort", self.root)?
+        Ok(shell!("find {} -type f \\( -name '*.md' -o -name '*.json' \\) | sort", self.root)?
             .trim()
             .split('\n')
             .filter(|line| !line.trim().is_empty())
@@ -236,8 +237,15 @@ impl DB {
     /// Ex: "Test Results" -> "./wiki_root/test_results.md"
     fn pathify(&self, path: &str) -> String {
         if path.ends_with(".md") {
-            path.into()
+            println!("path.ends_with(.md) {}", path);
+            // path.into()
+            self.absolute_path(&format!("{}", Self::title_to_name(path.into())))
+        } else if path.ends_with(".json") {
+            println!("path.ends_with(.json) {}", path);
+            // path.into()
+            self.absolute_path(&format!("{}", Self::title_to_name(path.into())))
         } else {
+            println!("self.absolute_path {}", Self::title_to_name(path));
             self.absolute_path(&format!("{}.md", Self::title_to_name(path)))
         }
     }

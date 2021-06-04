@@ -22,7 +22,7 @@
     def print-nested(x)
         for k, v in x
             if type(v) == 'Page'
-                <li> <a href={v.url}> split(v.title, '/')[-1]
+                <li> <a href={v.url}> split(v.title, '/')[-1] </a> <i><a href=edit{v.url}>edit</a></i>
             else
                 puts("<details><summary>{k}</summary><div class='inner'>")
                 print-nested(v)
